@@ -1,1 +1,109 @@
-<p>animal-form works!</p>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <form class="form" [formGroup]="animalForm" (ngSubmit)="animalSave()">
+        <div class="mb-3">
+          <label class="form-label" for="nome">Nome:</label>
+          <input
+            class="form-control"
+            id="nome"
+            type="text"
+            formControlName="nome"
+          />
+          <div
+            *ngIf="submitted && animalForm.controls['nome'].errors?.['required']"
+            class="error"
+          >
+            O nome é obrigatório.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="dataNascimento"
+            >Data de Nascimento:</label
+          >
+          <input
+            class="form-control"
+            id="dataNascimento"
+            type="date"
+            formControlName="dataNascimento"
+          />
+          <div
+            *ngIf="submitted && animalForm.controls['dataNascimento'].errors?.['required']"
+            class="error"
+          >
+            A data de nascimento é obrigatória.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="especie">Espécie:</label>
+          <select class="form-select" id="especie" formControlName="especie">
+            <option value="">Selecione</option>
+            <option value="Leão">Leão</option>
+            <option value="Cavalo">Cavalo</option>
+            <option value="Arara">Arara</option>
+            <option value="Orangotango">Orangotango</option>
+            <option value="Girafa">Girafa</option>
+          </select>
+          <div
+            *ngIf="submitted && animalForm.controls['especie'].errors?.['required']"
+            class="error"
+          >
+            A espécie é obrigatória.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="sexo">Sexo:</label>
+          <div class="switch-field">
+            <input
+              type="radio"
+              id="radio-one"
+              name="sexo"
+              formControlName="sexo"
+              [value]="'Macho'"
+              checked
+            />
+            <label for="radio-one">Macho</label>
+            <input
+              type="radio"
+              id="radio-two"
+              name="sexo"
+              formControlName="sexo"
+              [value]="'Fêmea'"
+            />
+            <label for="radio-two">Fêmea</label>
+          </div>
+
+          <div
+            *ngIf="submitted && animalForm.controls['sexo'].errors?.['required']"
+            class="error"
+          >
+            O sexo é obrigatório.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="vinculoMae">Vínculo com a Mãe:</label>
+          <input
+            class="form-control"
+            id="vinculoMae"
+            type="text"
+            formControlName="vinculoMae"
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="vinculoPai">Vínculo com o Pai:</label>
+          <input
+            class="form-control"
+            id="vinculoPai"
+            type="text"
+            formControlName="vinculoPai"
+          />
+        </div>
+        <app-button
+          [label]="'Salvar'"
+          [icon]="'fa-cloud'"
+          [estilo]="'primary'"
+        ></app-button>
+      </form>
+    </div>
+  </div>
+</div>

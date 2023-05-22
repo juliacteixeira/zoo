@@ -7,9 +7,11 @@ import { Component, Input } from '@angular/core';
 })
 export class ButtonComponent {
   @Input()
-  estilo!: string;
+  estilo = 'primary' || 'white' || 'danger';
   @Input()
   icon!: string;
   @Input()
   label!: string;
+  @Input()
+  onClick!: () => void;
 }
