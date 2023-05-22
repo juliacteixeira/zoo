@@ -1,4 +1,4 @@
-<button class="btn btn-{{ estilo }}" type="submit">
+<button class="btn btn-{{ estilo }}" type="submit" (click)="handleClick()">
   <i *ngIf="icon" class="fa-solid {{ icon }}"></i>
   {{ label }}
 </button>

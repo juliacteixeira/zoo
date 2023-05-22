@@ -7,10 +7,17 @@ import { formatDate } from '@shared/utils/utils';
 })
 export class AnimalService {
   animais: Animal[] = [];
-  private lastId: number = 0;
+  private static lastId: number = 0;
 
   constructor() {
     this.loadAnimaisFromLocalStorage();
+    this.setLastId();
+  }
+
+  setLastId(): void {
+    if (this.animais.length > 0) {
+      AnimalService.lastId = this.animais[this.animais.length - 1].id;
+    }
   }
 
   loadAnimaisFromLocalStorage() {
@@ -28,18 +35,25 @@ export class AnimalService {
   }
 
   adicionarAnimal(animal: Animal): void {
-    animal.id = ++this.lastId;
-    const formattedData = formatDate(animal.dataNascimento);
+    AnimalService.lastId++;
+    animal.id = AnimalService.lastId;
+    const formattedData = formatDate(animal.dataNascimento.toString());
+    console.log(formattedData);
 
     animal.dataNascimento = formattedData;
-
     this.animais.push(animal);
     this.saveAnimaisToLocalStorage();
+  }
+
+  getAnimalById(id: number) {
+    return this.animais.find((animal) => animal.id === id);
   }
 
   editarAnimal(animal: Animal): void {
     const index = this.animais.findIndex((a) => a.id === animal.id);
     if (index !== -1) {
+      const formattedData = formatDate(animal.dataNascimento);
+      animal.dataNascimento = formattedData;
       this.animais[index] = animal;
       this.saveAnimaisToLocalStorage();
     }
