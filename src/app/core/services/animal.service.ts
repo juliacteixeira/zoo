@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Animal } from '@shared/models/animal.models';
+import { formatDate } from '@shared/utils/utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AnimalService {
   animais: Animal[] = [];
+  private lastId: number = 0;
 
   constructor() {
     this.loadAnimaisFromLocalStorage();
@@ -26,6 +28,11 @@ export class AnimalService {
   }
 
   adicionarAnimal(animal: Animal): void {
+    animal.id = ++this.lastId;
+    const formattedData = formatDate(animal.dataNascimento);
+
+    animal.dataNascimento = formattedData;
+
     this.animais.push(animal);
     this.saveAnimaisToLocalStorage();
   }

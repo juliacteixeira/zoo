@@ -4,8 +4,7 @@
       <th>
         <input type="checkbox" (change)="toggleAllSelection($event)" />
       </th>
-      <th>ID</th>
-      <th *ngFor="let column of columns">{{ column }}</th>
+      <th *ngFor="let column of columns">{{ column.label }}</th>
     </tr>
   </thead>
   <tbody>
@@ -17,8 +16,9 @@
           (change)="toggleSelection(item)"
         />
       </td>
-      <td>{{ i + 1 }}</td>
-      <td *ngFor="let column of columns">{{ item[column] }}</td>
+      <td *ngFor="let column of columns">
+        {{ item[column.key] }}
+      </td>
     </tr>
   </tbody>
 </table>
