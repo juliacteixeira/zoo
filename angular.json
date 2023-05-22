@@ -30,7 +30,7 @@
               "src/styles.scss"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": ["src/styles"]
+              "includePaths": ["src/assets/scss"]
             },
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"

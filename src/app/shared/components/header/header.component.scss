@@ -1,0 +1,19 @@
+@import "_base.scss";
+.navbar {
+  padding: 0;
+  height: 100px;
+  background-color: $white;
+  box-shadow: 0px 5px 10px $shadow;
+  .navbar-brand {
+    width: 298px;
+    height: 100px;
+    background-color: $blue;
+    display: flex;
+    justify-content: center;
+    .logo {
+      height: 31.67px;
+      width: auto;
+      margin: auto;
+    }
+  }
+}

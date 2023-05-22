@@ -1,0 +1,12 @@
+@import "_base.scss";
+
+.table {
+  .thead {
+    border-bottom: 5px solid $light-grey;
+  }
+
+  .tr {
+    background-color: $white;
+    color: $color;
+  }
+}

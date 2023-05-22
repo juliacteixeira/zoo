@@ -1,0 +1,68 @@
+@import "_base.scss";
+
+.form {
+  background: $white 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px $shadow;
+  padding: 55px 40px;
+
+  .form-control {
+    color: $light-grey;
+    background-clip: padding-box;
+    border: none;
+    border-bottom: 7px solid $light-grey;
+    border-radius: 0;
+
+    &:focus {
+      box-shadow: 0 0 0 0.15rem $shadow;
+    }
+  }
+
+  .form-label {
+    font: normal normal normal 16px/19px Roboto;
+    letter-spacing: 0px;
+    color: $color;
+  }
+
+  .error {
+    font-size: 12px;
+    color: $danger;
+  }
+  .switch-field {
+    display: flex;
+    overflow: hidden;
+    input {
+      height: 1px;
+      width: 1px;
+      border: 0;
+      overflow: hidden;
+      &:checked + label {
+        background-color: $primary;
+        box-shadow: none;
+        color: $white;
+      }
+    }
+
+    label {
+      background-color: $light;
+      color: $color;
+      font-size: 21px;
+      line-height: 1;
+      text-align: center;
+      padding: 7px 16px;
+      margin-right: -1px;
+      transition: all 0.1s ease-in-out;
+      width: 50%;
+      &:hover {
+        cursor: pointer;
+      }
+
+      &:first-of-type {
+        border-radius: 10px 0 0 10px;
+      }
+
+      &:last-of-type {
+        border-radius: 0 10px 10px 0;
+      }
+    }
+  }
+}
