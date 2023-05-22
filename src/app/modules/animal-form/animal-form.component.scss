@@ -6,7 +6,7 @@
   padding: 55px 40px;
 
   .form-control {
-    color: $light-grey;
+    color: $color;
     background-clip: padding-box;
     border: none;
     border-bottom: 7px solid $light-grey;
@@ -14,6 +14,10 @@
 
     &:focus {
       box-shadow: 0 0 0 0.15rem $shadow;
+    }
+
+    &::placeholder {
+      color: $light-grey;
     }
   }
 
@@ -64,5 +68,15 @@
         border-radius: 0 10px 10px 0;
       }
     }
+  }
+}
+
+.alert {
+  border-radius: 20px;
+  border: none;
+  &.alert-success {
+    background-color: $success;
+    color: white;
+    font-weight: bold;
   }
 }

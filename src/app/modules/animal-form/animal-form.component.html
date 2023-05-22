@@ -1,6 +1,24 @@
 <div class="container">
   <div class="row">
     <div class="col-md-6">
+      <div
+        *ngIf="showAlert"
+        class="alert alert-success alert-dismissible fade show mt-3"
+        role="alert"
+      >
+        O animal foi editado com sucesso!
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
       <form class="form" [formGroup]="animalForm" (ngSubmit)="animalSave()">
         <div class="mb-3">
           <label class="form-label" for="nome">Nome:</label>
@@ -9,6 +27,7 @@
             id="nome"
             type="text"
             formControlName="nome"
+            placeholder="Jhon Due"
           />
           <div
             *ngIf="submitted && animalForm.controls['nome'].errors?.['required']"
@@ -26,6 +45,7 @@
             id="dataNascimento"
             type="date"
             formControlName="dataNascimento"
+            placeholder="dd / mm / yyyy"
           />
           <div
             *ngIf="submitted && animalForm.controls['dataNascimento'].errors?.['required']"
@@ -87,6 +107,7 @@
             id="vinculoMae"
             type="text"
             formControlName="vinculoMae"
+            placeholder="Jhon Due"
           />
         </div>
         <div class="mb-3">
@@ -96,6 +117,7 @@
             id="vinculoPai"
             type="text"
             formControlName="vinculoPai"
+            placeholder="Jhon Due"
           />
         </div>
         <app-button
