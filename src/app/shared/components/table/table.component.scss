@@ -8,5 +8,9 @@
   .tr {
     background-color: $white;
     color: $color;
+
+    &.selected {
+      background-color: $light-grey;
+    }
   }
 }

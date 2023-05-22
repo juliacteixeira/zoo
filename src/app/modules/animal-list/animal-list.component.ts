@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Animal } from '@shared/models/animal.models';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-animal-list',
@@ -9,6 +10,9 @@ import { Animal } from '@shared/models/animal.models';
 })
 export class AnimalListComponent {
   animais: Array<Animal> = [];
+  selectedAnimalId!: number;
+  private unsubscribe$: Subject<void> = new Subject<void>();
+
   tableColumns = [
     { key: 'id', label: 'ID' },
     { key: 'especie', label: 'Espécie' },
@@ -23,16 +27,22 @@ export class AnimalListComponent {
   constructor(private router: Router) {
     this.getAnimais();
   }
-
   getAnimais() {
     const animalsData = localStorage.getItem('animais');
 
     if (animalsData) {
       this.animais = JSON.parse(animalsData);
       this.tableData = this.animais;
-      console.log(this.animais);
     } else {
       this.animais = [];
+    }
+  }
+
+  editSelectedAnimal(): void {
+    if (this.selectedAnimalId) {
+      this.router.navigate(['/animal-form'], {
+        queryParams: { id: this.selectedAnimalId },
+      });
     }
   }
 }
