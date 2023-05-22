@@ -7,15 +7,11 @@ import { Component, Input } from '@angular/core';
 })
 export class TableComponent {
   @Input()
-  columns: string[] = [];
+  columns: any[] = [];
   @Input()
   data: any[] = [];
 
-  ngOnInit(): void {
-    // Código de inicialização e configuração aqui
-    console.log(this.data);
-    console.log(this.columns);
-  }
+  ngOnInit(): void {}
 
   toggleSelection(item: any) {
     item.selected = !item.selected;
