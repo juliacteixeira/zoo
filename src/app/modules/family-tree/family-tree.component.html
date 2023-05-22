@@ -1,0 +1,21 @@
+<div class="container">
+  <h2>Árvore Genealógica</h2>
+  <ul>
+    <li *ngFor="let animal of tree">
+      {{ animal.nome }} ({{ animal.especie }}) - Sexo: {{ animal.sexo }} -
+      Idade: {{ calcularIdade(animal.dataNascimento) }}
+      <ul *ngIf="animal.vinculoPai || animal.vinculoMae">
+        <li *ngIf="animal.vinculoPai">
+          Pai: {{ animal.vinculoPai.nome }} ({{ animal.vinculoPai.especie }}) -
+          Sexo: {{ animal.vinculoPai.sexo }} - Idade:
+          {{ calcularIdade(animal.vinculoPai.dataNascimento) }}
+        </li>
+        <li *ngIf="animal.vinculoMae">
+          Mãe: {{ animal.vinculoMae.nome }} ({{ animal.vinculoMae.especie }}) -
+          Sexo: {{ animal.vinculoMae.sexo }} - Idade:
+          {{ calcularIdade(animal.vinculoMae.dataNascimento) }}
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

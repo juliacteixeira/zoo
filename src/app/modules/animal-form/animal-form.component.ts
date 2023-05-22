@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AnimalService } from '@core/services/animal.service';
 import { Animal } from '@shared/models/animal.models';
@@ -39,11 +45,22 @@ export class AnimalFormComponent {
     this.animalForm = this.formBuilder.group({
       nome: ['', Validators.required],
       dataNascimento: ['', Validators.required],
-      especie: ['', Validators.required],
+      especie: ['', [Validators.required, this.validateEspecie.bind(this)]],
       sexo: ['Macho', Validators.required],
       vinculoMae: [''],
       vinculoPai: [''],
     });
+  }
+
+  validateEspecie(control: AbstractControl): ValidationErrors | null {
+    const especie = control.value;
+    const especiesAceitas = this.animalService.getEspecies();
+
+    if (especiesAceitas.indexOf(especie) === -1) {
+      return { especieInvalida: true };
+    }
+
+    return null;
   }
 
   setEditValue(animal: Animal) {

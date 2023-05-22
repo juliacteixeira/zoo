@@ -13,6 +13,7 @@ export class AnimalListComponent {
   animais: Array<Animal> = [];
   selectedAnimalId!: number;
   animaisSubscription: Subscription = new Subscription();
+  tree: Animal[] = [];
 
   tableColumns = [
     { key: 'id', label: 'ID' },
@@ -61,6 +62,42 @@ export class AnimalListComponent {
     if (this.selectedAnimalId) {
       this.animalService.excluirAnimal(this.selectedAnimalId);
       this.getAnimais();
+    }
+  }
+
+  showGenealogyTree(): void {
+    if (this.selectedAnimalId) {
+      const animal = this.animais.find((a) => a.id === this.selectedAnimalId);
+      if (animal) {
+        const tree: Animal[] = [];
+        this.buildGenealogicalTree(animal, tree);
+        console.log(tree);
+        this.router.navigate(['/family-tree'], {
+          queryParams: { animalFamily: tree },
+        });
+      }
+    }
+  }
+
+  private buildGenealogicalTree(animal: Animal | undefined, tree: Animal[]) {
+    if (!animal) {
+      return;
+    }
+
+    tree.push(animal);
+
+    if (animal.vinculoPai) {
+      const pai = this.animais.find((a) => a.id === animal.vinculoPai?.id);
+      if (pai) {
+        this.buildGenealogicalTree(pai, tree);
+      }
+    }
+
+    if (animal.vinculoMae) {
+      const mae = this.animais.find((a) => a.id === animal.vinculoMae?.id);
+      if (mae) {
+        this.buildGenealogicalTree(mae, tree);
+      }
     }
   }
 }
