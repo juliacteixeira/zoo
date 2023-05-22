@@ -1,1 +1,32 @@
-<app-animal-form></app-animal-form>
+<div class="container">
+  <div class="row">
+    <div class="d-inline-flex p-2">
+      <app-button
+        [estilo]="'primary'"
+        [icon]="'fa-plus'"
+        [label]="'Novo'"
+        class="me-2"
+      ></app-button>
+
+      <app-button
+        [estilo]="'white'"
+        [icon]="'fa-pen-to-square'"
+        [label]="'Editar'"
+        class="me-2"
+      ></app-button>
+
+      <app-button
+        [estilo]="'white'"
+        [icon]="'fa-tree'"
+        [label]="'Árvore'"
+        class="me-2"
+      ></app-button>
+
+      <app-button
+        [estilo]="'danger'"
+        [icon]="'fa-trash-can'"
+        [label]="'Remover'"
+      ></app-button>
+    </div>
+  </div>
+</div>
