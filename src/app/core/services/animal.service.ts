@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Animal } from '@shared/models/animal.models';
 import { formatDate } from '@shared/utils/utils';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,6 +9,9 @@ import { formatDate } from '@shared/utils/utils';
 export class AnimalService {
   animais: Animal[] = [];
   private static lastId: number = 0;
+  private animaisSubject: BehaviorSubject<Animal[]> = new BehaviorSubject<
+    Animal[]
+  >([]);
 
   constructor() {
     this.loadAnimaisFromLocalStorage();
@@ -41,7 +45,7 @@ export class AnimalService {
 
     animal.dataNascimento = formattedData;
     this.animais.push(animal);
-    this.saveAnimaisToLocalStorage();
+    this.updateAnimaisSubject();
   }
 
   getAnimalById(id: number) {
@@ -54,15 +58,29 @@ export class AnimalService {
       const formattedData = formatDate(animal.dataNascimento);
       animal.dataNascimento = formattedData;
       this.animais[index] = animal;
-      this.saveAnimaisToLocalStorage();
+      this.updateAnimaisSubject();
     }
   }
 
-  excluirAnimal(animal: Animal): void {
-    const index = this.animais.findIndex((a) => a.id === animal.id);
+  excluirAnimal(id: number): void {
+    const animal = this.getAnimalById(id);
+    const index = this.animais.findIndex((a) => a.id === animal?.id);
     if (index !== -1) {
       this.animais.splice(index, 1);
-      this.saveAnimaisToLocalStorage();
+      this.updateAnimaisSubject();
     }
+  }
+
+  getAnimaisSubject(): BehaviorSubject<Animal[]> {
+    return this.animaisSubject;
+  }
+
+  private emitAnimaisSubject(): void {
+    this.animaisSubject.next(this.animais);
+  }
+
+  private updateAnimaisSubject(): void {
+    this.saveAnimaisToLocalStorage();
+    this.emitAnimaisSubject();
   }
 }

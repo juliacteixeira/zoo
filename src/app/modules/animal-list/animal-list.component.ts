@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AnimalService } from '@core/services/animal.service';
 import { Animal } from '@shared/models/animal.models';
-import { Subject } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-animal-list',
@@ -11,7 +12,7 @@ import { Subject } from 'rxjs';
 export class AnimalListComponent {
   animais: Array<Animal> = [];
   selectedAnimalId!: number;
-  private unsubscribe$: Subject<void> = new Subject<void>();
+  animaisSubscription: Subscription = new Subscription();
 
   tableColumns = [
     { key: 'id', label: 'ID' },
@@ -24,8 +25,18 @@ export class AnimalListComponent {
   ];
   tableData: Array<Animal> = [];
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private animalService: AnimalService) {}
+  ngOnInit(): void {
+    this.animaisSubscription = this.animalService
+      .getAnimaisSubject()
+      .subscribe((animais) => {
+        this.animais = animais;
+      });
     this.getAnimais();
+  }
+
+  ngOnDestroy(): void {
+    this.animaisSubscription.unsubscribe();
   }
   getAnimais() {
     const animalsData = localStorage.getItem('animais');
@@ -43,6 +54,13 @@ export class AnimalListComponent {
       this.router.navigate(['/animal-form'], {
         queryParams: { id: this.selectedAnimalId },
       });
+    }
+  }
+
+  deleteAnimal() {
+    if (this.selectedAnimalId) {
+      this.animalService.excluirAnimal(this.selectedAnimalId);
+      this.getAnimais();
     }
   }
 }
