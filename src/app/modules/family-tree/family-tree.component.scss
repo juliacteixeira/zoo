@@ -1,17 +1,58 @@
+@import "_base.scss";
+
 .genealogy-tree {
   .tree-level {
     display: flex;
     align-items: center;
+    flex-direction: column;
+    width: 100%;
+    list-style: none;
 
     .animal-card {
       display: flex;
-      flex-direction: column;
       align-items: center;
       margin: 0 20px;
+      height: 105px;
+      width: 398px;
+      padding: 12px;
+      background: $white 0% 0% no-repeat padding-box;
+      border: none;
+      border-radius: 0;
+      box-shadow: 0px 3px 6px $shadow;
 
       .animal-info {
-        text-align: center;
+        width: 100%;
+        .dados{
+          margin-left: 19px;
+        }
+        .nome {
+          width: 100%;
+          font-size: 21px;
+          color: $color;
+          padding: 0;
+          margin: 0;
+        }
+        .subtitle {
+          font-size: 16px;
+          color: #686868;
+          padding: 0;
+          margin: 0;
+        }
+        .macho {
+          color: $primary;
+          font-size: 76px;
+        }
+        .femea{
+          color: $danger;
+          font-size: 76px;
+
+        }
       }
+    }
+
+    .parents {
+      list-style: none;
+      display: flex;
     }
 
     .branch {
