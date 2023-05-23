@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AnimalSelectionService } from '@core/services/animal-selection.service';
 
 @Component({
   selector: 'app-table',
@@ -15,7 +14,7 @@ export class TableComponent {
   @Output() animalSelected: EventEmitter<any> = new EventEmitter<any>();
   selectedItem: any;
 
-  constructor(private animalSelectionSrc: AnimalSelectionService) {}
+  constructor() {}
 
   ngOnInit(): void {}
 

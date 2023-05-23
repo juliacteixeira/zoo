@@ -103,22 +103,47 @@
         <div class="mb-3">
           <label class="form-label" for="vinculoMae">Vínculo com a Mãe:</label>
           <input
-            class="form-control"
-            id="vinculoMae"
             type="text"
-            formControlName="vinculoMae"
-            placeholder="Jhon Due"
+            placeholder="Vínculo Mãe"
+            aria-label="Vínculo Mãe"
+            [formControl]="vinculoMaeCtrl"
+            [value]="vinculoMaeCtrl.value"
+            class="form-control"
           />
+          <div *ngIf="showMsgError" class="error">
+            Escolha uma especie antes de prosseguir com o vinculo de pai e mãe
+          </div>
+
+          <ul>
+            <li
+              *ngFor="let animal of vinculoMaeOptions"
+              (click)="selectVinculoMae(animal)"
+            >
+              {{ animal.nome }}
+            </li>
+          </ul>
         </div>
         <div class="mb-3">
           <label class="form-label" for="vinculoPai">Vínculo com o Pai:</label>
           <input
-            class="form-control"
-            id="vinculoPai"
             type="text"
-            formControlName="vinculoPai"
-            placeholder="Jhon Due"
+            placeholder="Vínculo Pai"
+            aria-label="Vínculo Pai"
+            [formControl]="vinculoPaiCtrl"
+            [value]="vinculoPaiCtrl.value"
+            class="form-control"
           />
+          <div *ngIf="showMsgError" class="error">
+            Escolha uma especie antes de prosseguir com o vinculo de pai e mãe
+          </div>
+          <ul>
+            <li
+              *ngFor="let animal of vinculoPaiOptions"
+              (click)="selectVinculoPai(animal)"
+            >
+              {{ animal.nome }}
+            </li>
+          </ul>
         </div>
         <app-button
           [label]="'Salvar'"

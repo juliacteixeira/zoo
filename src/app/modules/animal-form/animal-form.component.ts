@@ -1,8 +1,16 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AnimalService } from '@core/services/animal.service';
 import { Animal } from '@shared/models/animal.models';
+import { debounceTime, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-animal-form',
@@ -15,6 +23,14 @@ export class AnimalFormComponent {
   animalEdit!: any;
   isEdit = false;
   showAlert = false;
+
+  vinculoPaiCtrl = new FormControl();
+  vinculoMaeCtrl = new FormControl();
+  vinculoPaiOptions: Animal[] = [];
+  vinculoMaeOptions: Animal[] = [];
+  pai: any;
+  mae: any;
+  showMsgError: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -33,17 +49,40 @@ export class AnimalFormComponent {
         this.setEditValue(this.animalEdit);
       }
     });
+
+    this.vinculoPaiCtrl.valueChanges
+      .pipe(debounceTime(300))
+      .subscribe((value) => {
+        this.filterAnimals(value, 'vinculoPaiOptions');
+      });
+
+    this.vinculoMaeCtrl.valueChanges
+      .pipe(debounceTime(300))
+      .subscribe((value) => {
+        this.filterAnimals(value, 'vinculoMaeOptions');
+      });
   }
 
   createForm() {
     this.animalForm = this.formBuilder.group({
       nome: ['', Validators.required],
       dataNascimento: ['', Validators.required],
-      especie: ['', Validators.required],
+      especie: ['', [Validators.required, this.validateEspecie.bind(this)]],
       sexo: ['Macho', Validators.required],
       vinculoMae: [''],
       vinculoPai: [''],
     });
+  }
+
+  validateEspecie(control: AbstractControl): ValidationErrors | null {
+    const especie = control.value;
+    const especiesAceitas = this.animalService.getEspecies();
+
+    if (especiesAceitas.indexOf(especie) === -1) {
+      return { especieInvalida: true };
+    }
+
+    return null;
   }
 
   setEditValue(animal: Animal) {
@@ -68,6 +107,33 @@ export class AnimalFormComponent {
     });
   }
 
+  filterAnimals(value: any, target: keyof AnimalFormComponent): void {
+    const filterValue = value.toLowerCase();
+    this[target] = this.animalService.getAnimais().filter((animal) => {
+      const nome = animal.nome.toLowerCase();
+      if (this.animalForm.value['especie'] === '') {
+        this.showMsgError = true;
+        return null;
+      } else {
+        if(nome.includes(filterValue) && animal.especie === this.animalForm.value['especie']) {
+          return nome.includes(filterValue);
+        }
+      }
+      return null
+    });
+  }
+
+  selectVinculoPai(animal: Animal) {
+
+    this.vinculoPaiCtrl.setValue(animal.nome);
+    this.pai = animal;
+  }
+
+  selectVinculoMae(animal: Animal) {
+    this.vinculoMaeCtrl.setValue(animal.nome);
+    this.mae = animal;
+  }
+
   animalSave(): void {
     this.submitted = true;
     if (this.animalForm.invalid) {
@@ -80,8 +146,8 @@ export class AnimalFormComponent {
       dataNascimento: this.animalForm.value.dataNascimento,
       especie: this.animalForm.value.especie,
       sexo: this.animalForm.value.sexo,
-      vinculoMae: this.animalForm.value.vinculoMae,
-      vinculoPai: this.animalForm.value.vinculoPai,
+      vinculoPai: this.pai ? this.pai : '',
+      vinculoMae: this.mae ? this.mae : '',
     };
 
     if (!this.animalEdit) {
@@ -94,7 +160,6 @@ export class AnimalFormComponent {
 
     this.setEmptyValue();
 
-    // Marcar o formulário como não submetido
     this.submitted = false;
   }
 }

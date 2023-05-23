@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AnimalService {
   animais: Animal[] = [];
+  especies: string[] = ['Leão', 'Cavalo', 'Arara', 'Orangotango', 'Girafa'];
   private static lastId: number = 0;
   private animaisSubject: BehaviorSubject<Animal[]> = new BehaviorSubject<
     Animal[]
@@ -52,6 +53,10 @@ export class AnimalService {
     return this.animais.find((animal) => animal.id === id);
   }
 
+  getEspecies(): string[] {
+    return this.especies;
+  }
+
   editarAnimal(animal: Animal): void {
     const index = this.animais.findIndex((a) => a.id === animal.id);
     if (index !== -1) {
@@ -82,5 +87,33 @@ export class AnimalService {
   private updateAnimaisSubject(): void {
     this.saveAnimaisToLocalStorage();
     this.emitAnimaisSubject();
+  }
+
+  getGenealogicalTree(animal: Animal): Animal[] {
+    const tree: Animal[] = [];
+    this.buildGenealogicalTree(animal, tree);
+    return tree;
+  }
+
+  private buildGenealogicalTree(animal: Animal, tree: Animal[]) {
+    if (!animal) {
+      return;
+    }
+
+    tree.push(animal);
+
+    if (animal.vinculoPai) {
+      const pai = this.animais.find((a) => a.nome === animal.vinculoPai?.nome);
+      if (pai) {
+        this.buildGenealogicalTree(pai, tree);
+      }
+    }
+
+    if (animal.vinculoMae) {
+      const mae = this.animais.find((a) => a.nome === animal.vinculoMae?.nome);
+      if (mae) {
+        this.buildGenealogicalTree(mae, tree);
+      }
+    }
   }
 }

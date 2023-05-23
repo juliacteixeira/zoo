@@ -1,0 +1,50 @@
+<div class="container mt-3 genealogy-tree">
+  <ul>
+    <li *ngFor="let animal of tree" class="tree-level">
+      <div class="card animal-card child">
+        <div class="animal-info d-inline-flex flex-row ">
+          <i *ngIf="animal.sexo === 'Macho'"class="fa-solid fa-mars macho"></i>
+          <i *ngIf="animal.sexo === 'Fêmea'"class="fa-solid fa-venus femea"></i>
+          <div class="row d-inline-flex flex-row dados">
+            <p class="nome">{{ animal.nome }}</p>
+            <div class="subtitle">
+              <p>{{ animal.especie }} - {{ calcularIdade(animal.dataNascimento) }} anos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+      <ul *ngIf="animal.vinculoPai || animal.vinculoMae" class="borda parents">
+        <li *ngIf="animal.vinculoPai">
+          <div class="card animal-card">
+            <div class="animal-info d-inline-flex flex-row ">
+              <i class="fa-solid fa-mars macho"></i>
+              <div class="row d-inline-flex flex-row dados">
+                <p class="nome">{{ animal.vinculoPai.nome }}</p>
+                <div class="subtitle">
+                  <p>{{ animal.vinculoPai.especie }} - {{ calcularIdade(animal.vinculoPai.dataNascimento) }} anos</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <hr>
+        <li *ngIf="animal.vinculoMae">
+          <div class="card animal-card">
+            <div class="animal-info d-inline-flex flex-row ">
+              <i class="fa-solid fa-venus femea"></i>
+              <div class="row d-inline-flex flex-row dados">
+                <p class="nome">{{ animal.vinculoMae.nome }}</p>
+                <div class="subtitle">
+                  <p>{{ animal.vinculoMae.especie }} - {{ calcularIdade(animal.vinculoMae.dataNascimento) }} anos</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AnimalService } from '@core/services/animal.service';
-import { Animal } from '@shared/models/animal.models';
+import { FamilyTreeService } from '@core/services/family-tree.service';
+import { Animal, TableAnimal } from '@shared/models/animal.models';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -13,6 +14,7 @@ export class AnimalListComponent {
   animais: Array<Animal> = [];
   selectedAnimalId!: number;
   animaisSubscription: Subscription = new Subscription();
+  tree: Animal[] = [];
 
   tableColumns = [
     { key: 'id', label: 'ID' },
@@ -23,9 +25,13 @@ export class AnimalListComponent {
     { key: 'vinculoMae', label: 'Nome da Mãe' },
     { key: 'dataNascimento', label: 'Aniversário' },
   ];
-  tableData: Array<Animal> = [];
+  tableData = [{}];
 
-  constructor(private router: Router, private animalService: AnimalService) {}
+  constructor(
+    private router: Router,
+    private animalService: AnimalService,
+    private familyService: FamilyTreeService
+  ) {}
   ngOnInit(): void {
     this.animaisSubscription = this.animalService
       .getAnimaisSubject()
@@ -43,7 +49,16 @@ export class AnimalListComponent {
 
     if (animalsData) {
       this.animais = JSON.parse(animalsData);
-      this.tableData = this.animais;
+      const newAnimal = this.animais.map((obj) => ({
+        vinculoMae: obj.vinculoMae?.nome ? obj.vinculoMae?.nome : '',
+        vinculoPai: obj.vinculoPai?.nome ? obj.vinculoPai?.nome : '',
+        id: obj.id,
+        nome: obj.nome,
+        especie: obj.especie,
+        sexo: obj.sexo,
+        dataNascimento: obj.dataNascimento,
+      }));
+      this.tableData = newAnimal;
     } else {
       this.animais = [];
     }
@@ -61,6 +76,36 @@ export class AnimalListComponent {
     if (this.selectedAnimalId) {
       this.animalService.excluirAnimal(this.selectedAnimalId);
       this.getAnimais();
+    }
+  }
+
+  showGenealogyTree(): void {
+    if (this.selectedAnimalId) {
+      const animal = this.animais.find((a) => a.id === this.selectedAnimalId);
+      if (animal) {
+        const tree: Animal[] = [];
+        this.buildGenealogicalTree(animal, tree);
+        this.familyService.saveFamilyTree(tree);
+        this.router.navigate(['/family-tree']);
+      }
+    }
+  }
+
+  private buildGenealogicalTree(animal: Animal | undefined, tree: Animal[]) {
+    if (!animal) {
+      return;
+    }
+
+    tree.push(animal);
+
+    if (animal.vinculoPai) {
+      const pai = this.animais.find((a) => a.id === animal.vinculoPai?.id);
+
+    }
+
+    if (animal.vinculoMae) {
+      const mae = this.animais.find((a) => a.id === animal.vinculoMae?.id);
+
     }
   }
 }
